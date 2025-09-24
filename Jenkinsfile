@@ -20,6 +20,20 @@ pipeline {
             }
         }
 
+        stage('Login to Docker Hub') {
+            
+            when {
+                branch 'master' 
+            }
+            steps {
+                echo "Logging in to Docker Hub..."
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    
+                    sh "docker login -u '${DOCKER_USER}' -p '${DOCKER_PASS}'"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             when { branch 'master' }
             steps {
