@@ -21,7 +21,7 @@ pipeline {
         }
 
         stage('Login to Docker Hub') {
-            
+
             when {
                 branch 'master' 
             }
@@ -51,14 +51,15 @@ pipeline {
                 script {
                     echo "Publishing Docker image to Docker Hub..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        
-                        echo "$DOCKER_PASS" | sh "docker login -u '${DOCKER_USER}' --password-stdin"
+                        sh """
+                            echo "$DOCKER_PASS" | sh "docker login -u '${DOCKER_USER}' --password-stdin"
 
                         
-                        sh "docker push ${IMAGE_NAME}:latest"
+                            "docker push ${IMAGE_NAME}:latest"
 
                         
-                        sh "docker logout"
+                            "docker logout"
+                        """
                     }
                 }
             }
