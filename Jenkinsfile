@@ -52,13 +52,13 @@ pipeline {
                     echo "Publishing Docker image to Docker Hub..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                         sh """
-                            echo "$DOCKER_PASS" | sh "docker login -u '${DOCKER_USER}' --password-stdin"
+                            echo "$DOCKER_PASS" | docker login -u '${DOCKER_USER}' --password-stdin
 
                         
-                            "docker push ${IMAGE_NAME}:latest"
+                            docker push ${IMAGE_NAME}:latest
 
                         
-                            "docker logout"
+                            docker logout
                         """
                     }
                 }
